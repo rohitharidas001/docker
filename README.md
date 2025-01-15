@@ -1,5 +1,5 @@
 # Overview
-Hi "Candidates Name Here"
+Hi Rohit
 
 Thank you for your interest in the H-E-B Digital Fulfillment team. The first part of your Engineering interview includes producing some sample code for you to review with an interviewer during the Technical Problem Review interview. 
 
@@ -18,7 +18,7 @@ Please let us know if you have any questions in the meantime. We look forward to
 
 # Order Service
 ## Overview
-Build an HTTP REST API in the language of your choice for a service that stores and returns online grocery orders. A user of the full API should be able to:
+Build an HTTP REST API in Java or Scala for a service that stores and returns online grocery orders. A user of the full API should be able to:
 - Create new orders in the service.
 - Retrieve orders by order id.
 - Retrieve orders by the UPCs they contain.
@@ -39,7 +39,7 @@ Build an HTTP REST API in the language of your choice for a service that stores 
 ### GET /orders/:id
 - Retrieve an order by id and return its data in JSON format. 
 ### GET /orders?upc=:upc
-- Retrieve all oreders that contain and item with the requested UPC and return their data in JSON format. 
+- Retrieve all oreders that contain and item with the requested UPC (item identifier) and return their data in JSON format. 
 ### GET /orders?until=:hours
 - Retrieve all orders that are expected to be picked up until the specified number of hours from the time of the request.
 -- ex: I want to retrieve all orders that are expected to be picked up before 3PM.
