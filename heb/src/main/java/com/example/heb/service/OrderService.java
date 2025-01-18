@@ -13,10 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -30,41 +29,44 @@ public class OrderService {
     @Autowired
     ItemsRepository itemsRepository;
 
-    public Order createOrder(OrderModel order){
+    public List<Order> createOrder(List<OrderModel> orderList){
 
         log.info("Entered create order method");
-        Order orderEntity = convertEntityToModel(order);
-
-        Optional<Order> result = orderRepository.findById(order.getOrder());
-        if(result.isPresent()){
-            return result.get();
-        } else {
-            orderEntity = orderRepository.save(orderEntity);
-        }
-        return orderEntity;
+        List<Order> orderEntityList = convertEntityToModel(orderList);
+        orderRepository.saveAll(orderEntityList);
+        return orderEntityList;
     }
 
-    private Order convertEntityToModel(OrderModel order){
-        Order orderEntity = new Order();
-        List<Items> itemsList = new ArrayList<>();
-        //order.setPhone(order.getCustomer().getPhone());
-        //order.setFirstName(order.getCustomer().getName().getFirstName());
-        //order.setLastName(order.getCustomer().getName().getLastName());
+    private List<Order> convertEntityToModel(List<OrderModel> orderModelList){
+        List<Order> orderEntityList = new ArrayList<>();
+        for(OrderModel order:orderModelList) {
+            Order orderEntity = new Order();
+            List<Items> itemsList = new ArrayList<>();
+            //order.setPhone(order.getCustomer().getPhone());
+            //order.setFirstName(order.getCustomer().getName().getFirstName());
+            //order.setLastName(order.getCustomer().getName().getLastName());
 
-        orderEntity.setOrder(order.getOrder());
-        orderEntity.setOrderDate(order.getOrderDate());
-        orderEntity.setExpectedPickupTime(order.getExpectedPickupTime());
-        orderEntity.setStoreId(order.getStoreId());
-        for(ItemsModel item:order.getItems()){
-            Items items = new Items();
-            items.setName(item.getName());
-            items.setUpc(item.getUpc());
-            items.setQuantity(item.getQuantity());
-            items.setOrder_id(order.getOrder());
-            itemsList.add(items);
+            orderEntity.setOrder(order.getOrder());
+            orderEntity.setOrderDate(order.getOrderDate());
+            orderEntity.setExpectedPickupTime(parseTime(order.getExpectedPickupTime()));
+            orderEntity.setStoreId(order.getStoreId());
+            for (ItemsModel item : order.getItems()) {
+                Items items = new Items();
+                items.setName(item.getName());
+                items.setUpc(item.getUpc());
+                items.setQuantity(item.getQuantity());
+                items.setOrder_id(order.getOrder());
+                itemsList.add(items);
+            }
+            orderEntity.setItems(itemsList);
+            orderEntityList.add(orderEntity);
         }
-        orderEntity.setItems(itemsList);
-        return orderEntity;
+
+        return orderEntityList;
+    }
+
+    private String parseTime(String time){
+        return LocalTime.parse(time, DateTimeFormatter.ofPattern("h:mma", Locale.US)).format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
     public Order getOrderById(String orderId){
@@ -74,5 +76,32 @@ public class OrderService {
 
     public List<OrderProjection> getOrderByUpc(Integer upc){
         return orderRepository.getOrderByUpc(upc);
+    }
+
+    public Map<String, List<ItemsModel>> getOrderByExpectedTime(String expectedTime){
+        Map<String, List<ItemsModel>> finalResult = new HashMap<>();
+        expectedTime = parseTime(expectedTime);
+        List<OrderProjection> result = orderRepository.getOrderByExpectedTime(expectedTime);
+        for(OrderProjection data : result){
+            if(!finalResult.containsKey(data.getOrderId())){
+                List<ItemsModel> itemsModelList = new ArrayList<>();
+                itemsModelList.add(setItemsModelData(data));
+                finalResult.put(data.getOrderId(), itemsModelList);
+            } else {
+                List<ItemsModel> itemsModelList = finalResult.get(data.getOrderId());
+                itemsModelList.add(setItemsModelData(data));
+                finalResult.put(data.getOrderId(), itemsModelList);
+            }
+        }
+        return finalResult;
+    }
+
+    private ItemsModel setItemsModelData(OrderProjection data){
+        ItemsModel itemsModel = new ItemsModel();
+        itemsModel.setUpc(data.getUpc());
+        itemsModel.setName(data.getName());
+        itemsModel.setQuantity(data.getQuantity());
+        itemsModel.setOrderId(data.getOrderId());
+        return itemsModel;
     }
 }
