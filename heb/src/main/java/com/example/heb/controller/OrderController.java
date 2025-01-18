@@ -43,7 +43,7 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
-    public ResponseEntity<?> getOrderByUpc(@RequestParam @NotBlank Integer upc) {
+    public ResponseEntity<?> getOrderByUpc(@RequestParam Integer upc) {
         List<OrderProjection> finalResult = orderService.getOrderByUpc(upc);
         if(!CollectionUtils.isEmpty(finalResult)) {
             return new ResponseEntity<>(finalResult, HttpStatus.OK);
