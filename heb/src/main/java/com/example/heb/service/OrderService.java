@@ -97,10 +97,6 @@ public class OrderService {
         return finalResult;
     }
 
-    public void deleteFromItemsByOrderId(String orderId){
-        orderRepository.deleteFromItemsByOrderId(orderId);
-    }
-
     @Transactional
     public void deleteOrderById(String orderId){
         orderRepository.deleteFromItemsByOrderId(orderId);
