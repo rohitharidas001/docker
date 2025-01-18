@@ -12,7 +12,7 @@ public class Order {
     @Column(name="order_id")
     private String order;
     //Customer customer;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinColumn(name="order_id",referencedColumnName = "order_id")
     private List<Items> items;
     private String storeId;

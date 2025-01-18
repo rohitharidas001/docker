@@ -7,6 +7,7 @@ import com.example.heb.model.OrderModel;
 import com.example.heb.model.OrderProjection;
 import com.example.heb.repository.ItemsRepository;
 import com.example.heb.repository.OrderRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,6 +95,16 @@ public class OrderService {
             }
         }
         return finalResult;
+    }
+
+    public void deleteFromItemsByOrderId(String orderId){
+        orderRepository.deleteFromItemsByOrderId(orderId);
+    }
+
+    @Transactional
+    public void deleteOrderById(String orderId){
+        orderRepository.deleteFromItemsByOrderId(orderId);
+        orderRepository.deleteByOrderId(orderId);
     }
 
     private ItemsModel setItemsModelData(OrderProjection data){

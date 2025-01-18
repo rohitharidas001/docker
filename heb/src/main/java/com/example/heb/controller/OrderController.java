@@ -61,4 +61,11 @@ public class OrderController {
             throw new ResourceNotFoundException("No orders available by the expected time");
         }
     }
+
+    @DeleteMapping("/orders/{orderId}")
+    public ResponseEntity<?> deleteOrderById(@PathVariable @NotBlank String orderId) {
+        orderService.deleteOrderById(orderId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

@@ -12,9 +12,6 @@ public class Items {
     private String name;
     private int quantity;
     private String order_id;
-/*    @ManyToOne
-    @JoinColumn(name="order_id")
-    private Order order;*/
 
     public String getOrder_id() {
         return order_id;
