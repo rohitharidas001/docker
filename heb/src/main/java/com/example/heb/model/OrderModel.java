@@ -17,6 +17,15 @@ public class OrderModel {
     private String firstName;
     private String lastName;
     private String phone;
+    private CustomerModel customer;
+
+    public CustomerModel getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(CustomerModel customer) {
+        this.customer = customer;
+    }
 
     public String getOrder() {
         return order;

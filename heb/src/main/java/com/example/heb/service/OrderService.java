@@ -30,27 +30,27 @@ public class OrderService {
     @Autowired
     ItemsRepository itemsRepository;
 
-    public List<Order> createOrder(List<OrderModel> orderList){
+    public List<OrderModel> createOrder(List<OrderModel> orderList){
 
         log.info("Entered create order method");
-        List<Order> orderEntityList = convertEntityToModel(orderList);
+        List<Order> orderEntityList = convertModelToEntity(orderList);
         orderRepository.saveAll(orderEntityList);
-        return orderEntityList;
+        return orderList;
     }
 
-    private List<Order> convertEntityToModel(List<OrderModel> orderModelList){
+    private List<Order> convertModelToEntity(List<OrderModel> orderModelList){
         List<Order> orderEntityList = new ArrayList<>();
         for(OrderModel order:orderModelList) {
             Order orderEntity = new Order();
             List<Items> itemsList = new ArrayList<>();
-            //order.setPhone(order.getCustomer().getPhone());
-            //order.setFirstName(order.getCustomer().getName().getFirstName());
-            //order.setLastName(order.getCustomer().getName().getLastName());
 
             orderEntity.setOrder(order.getOrder());
             orderEntity.setOrderDate(order.getOrderDate());
             orderEntity.setExpectedPickupTime(parseTime(order.getExpectedPickupTime()));
             orderEntity.setStoreId(order.getStoreId());
+            orderEntity.setPhone(order.getCustomer().getPhone());
+            orderEntity.setFirstName(order.getCustomer().getName().getFirstName());
+            orderEntity.setLastName(order.getCustomer().getName().getLastName());
             for (ItemsModel item : order.getItems()) {
                 Items items = new Items();
                 items.setName(item.getName());
