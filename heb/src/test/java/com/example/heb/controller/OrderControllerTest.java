@@ -69,7 +69,7 @@ public class OrderControllerTest {
     }
 
     @Test
-    public void testdeleteOrderEndPoint() throws Exception {
+    public void testDeleteOrderEndPoint() throws Exception {
         Mockito.doNothing().when(orderService).deleteOrderById("HEB4334");
 
         mockMvc.perform(delete("/orders/{orderId}", "HEB4334"))
