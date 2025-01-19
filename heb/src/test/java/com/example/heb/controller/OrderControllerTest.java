@@ -39,9 +39,6 @@ public class OrderControllerTest {
     @Mock
     private OrderService orderService;
 
-    @Mock
-    private OrderRepository orderRepository;
-
     @Test
     public void testCreateOrderEndPoint() throws Exception {
         CustomerModel customerModel = new CustomerModel();
