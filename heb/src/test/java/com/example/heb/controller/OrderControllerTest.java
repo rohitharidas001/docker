@@ -69,7 +69,6 @@ public class OrderControllerTest {
 
         mockMvc.perform(post("/orders").content(new ObjectMapper().writeValueAsString(orderModelList)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-                //.andExpect(content().string("someValue"));
     }
 
     @Test
@@ -78,6 +77,5 @@ public class OrderControllerTest {
 
         mockMvc.perform(delete("/orders/{orderId}", "HEB4334"))
                 .andExpect(status().isNoContent());
-        //.andExpect(content().string("someValue"));
     }
 }
