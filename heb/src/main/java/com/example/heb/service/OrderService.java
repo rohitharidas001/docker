@@ -2,9 +2,7 @@ package com.example.heb.service;
 
 import com.example.heb.entity.Items;
 import com.example.heb.entity.Order;
-import com.example.heb.model.ItemsModel;
-import com.example.heb.model.OrderModel;
-import com.example.heb.model.OrderProjection;
+import com.example.heb.model.*;
 import com.example.heb.repository.ItemsRepository;
 import com.example.heb.repository.OrderRepository;
 import jakarta.transaction.Transactional;
@@ -69,14 +67,22 @@ public class OrderService {
     private OrderModel convertEntityToModel(Order order){
         OrderModel orderModel = new OrderModel();
         ItemsModel itemsModel = new ItemsModel();
+        CustomerModel customerModel = new CustomerModel();
+        NameModel nameModel = new NameModel();
+        nameModel.setFirstName(order.getFirstName());
+        nameModel.setLastName(order.getLastName());
+        customerModel.setName(nameModel);
+        customerModel.setPhone(order.getPhone());
         List<ItemsModel> itemsModelList = new ArrayList<>();
         orderModel.setOrder(order.getOrder());
         orderModel.setStoreId(order.getStoreId());
         orderModel.setPhone(order.getPhone());
         orderModel.setOrderDate(order.getOrderDate());
+        orderModel.setCustomer(customerModel);
         itemsModel.setUpc(order.getItems().get(0).getUpc());
         itemsModel.setQuantity(order.getItems().get(0).getQuantity());
         itemsModel.setName(order.getItems().get(0).getName());
+        itemsModelList.add(itemsModel);
         orderModel.setItems(itemsModelList);
         return orderModel;
     }
