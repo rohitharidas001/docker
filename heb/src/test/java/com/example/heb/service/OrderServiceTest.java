@@ -31,6 +31,13 @@ public class OrderServiceTest {
     @Test
     public void testGetOrderById() {
         Order order = new Order();
+        Items items = new Items();
+        items.setName("carrot");
+        items.setQuantity(2);
+        items.setUpc(8993);
+        List<Items> itemsList = new ArrayList<>();
+        itemsList.add(items);
+        order.setItems(itemsList);
         order.setStoreId("127");
         order.setOrderDate("1-17-2024");
         order.setExpectedPickupTime("3:00PM");

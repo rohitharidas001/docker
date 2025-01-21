@@ -68,10 +68,16 @@ public class OrderService {
 
     private OrderModel convertEntityToModel(Order order){
         OrderModel orderModel = new OrderModel();
+        ItemsModel itemsModel = new ItemsModel();
+        List<ItemsModel> itemsModelList = new ArrayList<>();
         orderModel.setOrder(order.getOrder());
         orderModel.setStoreId(order.getStoreId());
         orderModel.setPhone(order.getPhone());
         orderModel.setOrderDate(order.getOrderDate());
+        itemsModel.setUpc(order.getItems().get(0).getUpc());
+        itemsModel.setQuantity(order.getItems().get(0).getQuantity());
+        itemsModel.setName(order.getItems().get(0).getName());
+        orderModel.setItems(itemsModelList);
         return orderModel;
     }
 
