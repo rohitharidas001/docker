@@ -1,5 +1,7 @@
 package com.example.heb.controller;
 
+import com.example.heb.entity.Items;
+import com.example.heb.entity.Order;
 import com.example.heb.model.CustomerModel;
 import com.example.heb.model.ItemsModel;
 import com.example.heb.model.NameModel;
@@ -65,6 +67,26 @@ public class OrderControllerTest {
         when(orderService.createOrder(orderModelList)).thenReturn(orderModelList);
 
         mockMvc.perform(post("/orders").content(new ObjectMapper().writeValueAsString(orderModelList)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testGeOrderEndPoint() throws Exception {
+        Order order = new Order();
+        Items items = new Items();
+        List<Items> itemsList = new ArrayList<>();
+        items.setName("carrot");
+        items.setQuantity(2);
+        items.setUpc(8992);
+        itemsList.add(items);
+        order.setOrder("HEB4334");
+        order.setStoreId("127");
+        order.setItems(itemsList);
+        order.setExpectedPickupTime("6:00AM");
+        order.setOrderDate("2023-06-30");
+        when(orderService.getOrderById("HEB4334")).thenReturn(order);
+
+        mockMvc.perform(get("/orders/{orderId}", "HEB4334"))
                 .andExpect(status().isOk());
     }
 
