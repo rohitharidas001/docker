@@ -72,19 +72,19 @@ public class OrderControllerTest {
 
     @Test
     public void testGeOrderEndPoint() throws Exception {
-        Order order = new Order();
-        Items items = new Items();
-        List<Items> itemsList = new ArrayList<>();
-        items.setName("carrot");
-        items.setQuantity(2);
-        items.setUpc(8992);
-        itemsList.add(items);
-        order.setOrder("HEB4334");
-        order.setStoreId("127");
-        order.setItems(itemsList);
-        order.setExpectedPickupTime("6:00AM");
-        order.setOrderDate("2023-06-30");
-        when(orderService.getOrderById("HEB4334")).thenReturn(order);
+        OrderModel orderModel = new OrderModel();
+        ItemsModel itemsModel = new ItemsModel();
+        List<ItemsModel> itemsModelList = new ArrayList<>();
+        itemsModel.setName("carrot");
+        itemsModel.setQuantity(2);
+        itemsModel.setUpc(8992);
+        itemsModelList.add(itemsModel);
+        orderModel.setOrder("HEB4334");
+        orderModel.setStoreId("127");
+        orderModel.setItems(itemsModelList);
+        orderModel.setExpectedPickupTime("6:00AM");
+        orderModel.setOrderDate("2023-06-30");
+        when(orderService.getOrderById("HEB4334")).thenReturn(orderModel);
 
         mockMvc.perform(get("/orders/{orderId}", "HEB4334"))
                 .andExpect(status().isOk());

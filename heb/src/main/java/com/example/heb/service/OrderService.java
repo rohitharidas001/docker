@@ -66,13 +66,26 @@ public class OrderService {
         return orderEntityList;
     }
 
+    private OrderModel convertEntityToModel(Order order){
+        OrderModel orderModel = new OrderModel();
+        orderModel.setOrder(order.getOrder());
+        orderModel.setStoreId(order.getStoreId());
+        orderModel.setPhone(order.getPhone());
+        orderModel.setOrderDate(order.getOrderDate());
+        return orderModel;
+    }
+
     private String parseTime(String time){
         return LocalTime.parse(time, DateTimeFormatter.ofPattern("h:mma", Locale.US)).format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
-    public Order getOrderById(String orderId){
+    public OrderModel getOrderById(String orderId){
         Optional<Order> result = orderRepository.findById(orderId);
-        return result.orElse(null);
+        OrderModel orderModel = null;
+        if(result.isPresent()) {
+            orderModel = convertEntityToModel(result.get());
+        }
+        return orderModel;
     }
 
     public List<OrderProjection> getOrderByUpc(Integer upc){

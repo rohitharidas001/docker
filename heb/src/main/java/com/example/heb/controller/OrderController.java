@@ -34,7 +34,7 @@ public class OrderController {
 
     @GetMapping("/orders/{orderId}")
     public ResponseEntity<?> getOrder(@PathVariable @NotBlank String orderId) {
-        Order finalResult = orderService.getOrderById(orderId);
+        OrderModel finalResult = orderService.getOrderById(orderId);
         if(finalResult!=null) {
             return new ResponseEntity<>(finalResult, HttpStatus.OK);
         } else {

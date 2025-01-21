@@ -3,6 +3,7 @@ package com.example.heb.service;
 import com.example.heb.entity.Items;
 import com.example.heb.entity.Order;
 import com.example.heb.model.ItemsModel;
+import com.example.heb.model.OrderModel;
 import com.example.heb.model.OrderProjection;
 import com.example.heb.repository.OrderRepository;
 import org.junit.jupiter.api.Test;
@@ -36,10 +37,12 @@ public class OrderServiceTest {
         order.setPhone("469-632-8971");
         Mockito.when(orderRepository.findById("HEB34334")).thenReturn(java.util.Optional.of(order));
 
-        Order result = orderService.getOrderById("HEB34334");
+        OrderModel result = orderService.getOrderById("HEB34334");
 
         Mockito.verify(orderRepository).findById("HEB34334");
-        assertEquals(order, result);
+        assertEquals(order.getOrder(), result.getOrder());
+        assertEquals(order.getStoreId(), result.getStoreId());
+        assertEquals(order.getPhone(), result.getPhone());
     }
 
     @Test
