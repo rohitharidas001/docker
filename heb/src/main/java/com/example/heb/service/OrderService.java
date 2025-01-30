@@ -38,6 +38,34 @@ public class OrderService {
 
     private List<Order> convertModelToEntity(List<OrderModel> orderModelList){
         List<Order> orderEntityList = new ArrayList<>();
+
+        //parallel performance with synchronization
+        orderModelList.parallelStream().forEach(o ->{
+            Order orderEntity = new Order();
+            List<Items> itemsList = new ArrayList<>();
+            orderEntity.setOrder(o.getOrder());
+            orderEntity.setOrderDate(o.getOrderDate());
+            orderEntity.setExpectedPickupTime(parseTime(o.getExpectedPickupTime()));
+            orderEntity.setStoreId(o.getStoreId());
+            orderEntity.setPhone(o.getCustomer().getPhone());
+            orderEntity.setFirstName(o.getCustomer().getName().getFirstName());
+            orderEntity.setLastName(o.getCustomer().getName().getLastName());
+            o.getItems().forEach(i->{
+                Items items = new Items();
+                items.setName(i.getName());
+                items.setUpc(i.getUpc());
+                items.setQuantity(i.getQuantity());
+                items.setOrder_id(o.getOrder());
+                itemsList.add(items);
+            });
+            orderEntity.setItems(itemsList);
+            synchronized (orderEntityList) {
+                orderEntityList.add(orderEntity);
+            }
+        });
+
+//serial performance with non synchronization
+/*
         for(OrderModel order:orderModelList) {
             Order orderEntity = new Order();
             List<Items> itemsList = new ArrayList<>();
@@ -59,7 +87,7 @@ public class OrderService {
             }
             orderEntity.setItems(itemsList);
             orderEntityList.add(orderEntity);
-        }
+        }*/
 
         return orderEntityList;
     }
