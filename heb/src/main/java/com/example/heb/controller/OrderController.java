@@ -10,6 +10,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
@@ -25,6 +26,14 @@ public class OrderController {
 
     @Autowired
     OrderService orderService;
+
+    @Value("${sm://db-password}")
+    String password;
+
+    @GetMapping("/hello")
+    public ResponseEntity<?> sayHello() {
+        return new ResponseEntity<>("Hello World Again!!" + password , HttpStatus.OK);
+    }
 
     @PostMapping("/orders")
     public ResponseEntity<?> createOrder(@RequestBody List<OrderModel> order) {

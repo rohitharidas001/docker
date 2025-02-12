@@ -65,8 +65,8 @@ public class OrderService {
         });
 
 //serial performance with non synchronization
-/*
-        for(OrderModel order:orderModelList) {
+
+/*        for(OrderModel order:orderModelList) {
             Order orderEntity = new Order();
             List<Items> itemsList = new ArrayList<>();
 
@@ -120,6 +120,7 @@ public class OrderService {
     }
 
     public OrderModel getOrderById(String orderId){
+        log.info("Entered getOrderById method");
         Optional<Order> result = orderRepository.findById(orderId);
         OrderModel orderModel = null;
         if(result.isPresent()) {
@@ -129,10 +130,12 @@ public class OrderService {
     }
 
     public List<OrderProjection> getOrderByUpc(Integer upc){
+        log.info("Entered getOrderByUpc method");
         return orderRepository.getOrderByUpc(upc);
     }
 
     public Map<String, List<ItemsModel>> getOrderByExpectedTime(String expectedTime){
+        log.info("Entered getOrderByExpectedTime method");
         Map<String, List<ItemsModel>> finalResult = new HashMap<>();
         expectedTime = parseTime(expectedTime);
         List<OrderProjection> result = orderRepository.getOrderByExpectedTime(expectedTime);
@@ -152,6 +155,7 @@ public class OrderService {
 
     @Transactional
     public void deleteOrderById(String orderId){
+        log.info("Entered deleteOrderById method");
         orderRepository.deleteFromItemsByOrderId(orderId);
         orderRepository.deleteByOrderId(orderId);
     }
